@@ -8,11 +8,15 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from Ponto import Ponto
-
 from random import randint as rand
 
-""" Classe Linha """
+
 class Linha:
+
+    """
+    - Classe Linha
+    """
+
     def __init__(self, minx: float = 0, miny: float = 0, maxx: float = 0, maxy: float = 0, x1: float = 0, y1: float = 0, x2: float = 0, y2: float = 0):
         self.minx = minx
         self.miny = miny
@@ -23,8 +27,11 @@ class Linha:
         self.x2 = x2
         self.y2 = y2
 
-    """ Gera uma linha com tamanho 'tamMax' dentro de um limite 'limite'. Armazena os valores nas variaveis x1,x2,y1,y2."""
     def geraLinha(self, limite: int, tamMax: int):
+        """
+        - Gera uma linha com tamanho 'tamMax' dentro de um limite 'limite'. 
+        Armazena os valores nas variaveis x1,x2,y1,y2.
+        """
         self.x1 = (rand(0, limite)*10) / 10.0
         self.y1 = (rand(0, limite)*10) / 10.0
 
@@ -41,8 +48,11 @@ class Linha:
         else:
             self.y2 = self.y1 - deltaY * tamMax
 
-    """ Desenha a linha na tela atual """
+    
     def desenhaLinha(self):
+        """
+        - Desenha a linha na tela atual
+        """
         glBegin(GL_LINES)
         
         glVertex2f(self.x1, self.y1)

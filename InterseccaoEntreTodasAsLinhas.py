@@ -12,19 +12,22 @@ from Linha import Linha
 from typing import Tuple
 import time
 
+# Constantes
 N_LINHAS = 50
 MAX_X = 100
+ESCAPE = b'\x1b'
 
+# Variaveis globais
 ContadorInt = 0
 ContChamadas = 0
-
+nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
+oldTime = time.time()
 linhas = []
 
-# **********************************************************************
-#  init()
-#  Inicializa os parâmetros globais de OpenGL
-#/ **********************************************************************
-def init():
+def init() -> None:
+    """
+    - Inicializa os parâmetros globais de OpenGL
+    """
     global linhas
 
     # Define a cor do fundo da tela (BRANCO) 
@@ -35,12 +38,11 @@ def init():
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)
 
-# **********************************************************************
-#  reshape( w: int, h: int )
-#  trata o redimensionamento da janela OpenGL
-#
-# **********************************************************************
-def reshape(w: int, h: int):
+
+def reshape(w: int, h: int) -> None:
+    """
+    - Trata o redimensionamento da janela OpenGL
+    """
     # Reseta coordenadas do sistema antes the modificala
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -54,22 +56,20 @@ def reshape(w: int, h: int):
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
-# ********************************************************************** */
-#                                                                        */
-#  Calcula a interseccao entre 2 retas (no plano "XY" Z = 0)             */
-#                                                                        */
-# k : ponto inicial da reta 1                                            */
-# l : ponto final da reta 1                                              */
-# m : ponto inicial da reta 2                                            */
-# n : ponto final da reta 2                                              */
-# 
-# Retorna:
-# 0, se não houver interseccao ou 1, caso haja                                                                       */
-# int, valor do parâmetro no ponto de interseção (sobre a reta KL)       */
-# int, valor do parâmetro no ponto de interseção (sobre a reta MN)       */
-#                                                                        */
-# ********************************************************************** */
+
 def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> Tuple[int, float, float]:
+    """
+    - Calcula a interseccao entre 2 retas (no plano 'XY' Z = 0)
+    - Params:
+        - k: ponto inicial da reta 1
+        - l: ponto final da reta 1
+        - m: ponto inicial da reta 2
+        - n: ponto final da reta 2
+    - Returns:
+        - 0, se não houver interseccao ou 1, caso haja
+        - int, valor do parâmetro no ponto de interseção (sobre a reta KL)
+        - int, valor do parâmetro no ponto de interseção (sobre a reta MN)
+    """
     det = (n.x - m.x) * (l.y - k.y)  -  (n.y - m.y) * (l.x - k.x)
 
     if (det == 0.0):
@@ -80,12 +80,11 @@ def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> Tuple[int, float, floa
 
     return 1, s, t # há intersecção
 
-# **********************************************************************
-# HaInterseccao(k: Ponto, l: Ponto, m: Ponto, n: Ponto)
-# Detecta interseccao entre os pontos
-#
-# **********************************************************************
+
 def HaInterseccao(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> bool:
+    """
+    - Detecta interseccao entre os pontos
+    """
     ret, s, t = intersec2d( k,  l,  m,  n)
 
     if not ret: return False
@@ -93,12 +92,10 @@ def HaInterseccao(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> bool:
     return s>=0.0 and s <=1.0 and t>=0.0 and t<=1.0
 
 
-# **********************************************************************
-# DesenhaLinhas()
-# Desenha as linha na tela
-#
-# **********************************************************************
 def DesenhaLinhas():
+    """
+    - Desenha as linhas na tela
+    """
     global linhas
 
     glColor3f(0,1,0)
@@ -106,12 +103,11 @@ def DesenhaLinhas():
     for linha in linhas:
         linha.desenhaLinha()
 
-# **********************************************************************
-# DesenhaCenario()
-# Desenha o cenario
-#
-# **********************************************************************
+
 def DesenhaCenario():
+    """
+    - Desenha o cenario
+    """
     global ContChamadas, ContadorInt
 
     PA, PB, PC, PD = Ponto(), Ponto(), Ponto(), Ponto()
@@ -137,12 +133,10 @@ def DesenhaCenario():
                 linhas[j].desenhaLinha()
             
 
-# **********************************************************************
-# display()
-# Funcao que exibe os desenhos na tela
-#
-# **********************************************************************
 def display():
+    """
+    - Funcao que exibe os desenhos na tela
+    """
     # Limpa a tela com  a cor de fundo
     glClear(GL_COLOR_BUFFER_BIT)
 
@@ -155,17 +149,11 @@ def display():
     glutSwapBuffers()
 
 
-# **********************************************************************
-# animate()
-# Funcao chama enquanto o programa esta ocioso
-# Calcula o FPS e numero de interseccao detectadas, junto com outras informacoes
-#
-# **********************************************************************
-# Variaveis Globais
-nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
-oldTime = time.time()
-
 def animate():
+    """
+    - Funcao chama enquanto o programa esta ocioso.
+    Calcula o FPS e numero de interseccao detectadas, junto com outras informacoes.
+    """
     global nFrames, TempoTotal, AccumDeltaT, oldTime
 
     nowTime = time.time()
@@ -191,14 +179,11 @@ def animate():
         print(f'Contador de Intersecoes Existentes: {ContadorInt/2.0}')
         print(f'Contador de Chamadas: {ContChamadas}')
 
-# **********************************************************************
-#  keyboard ( key: int, x: int, y: int )
-#
-# **********************************************************************
-ESCAPE = b'\x1b'
+
 def keyboard(*args):
-    #print (args)
-    # If escape is pressed, kill everything.
+    """
+    - Valida inicializacao / finalizacao do programa
+    """
 
     if args[0] == ESCAPE:   # Termina o programa qdo
         os._exit(0)         # a tecla ESC for pressionada
@@ -209,13 +194,11 @@ def keyboard(*args):
     # Força o redesenho da tela
     glutPostRedisplay()
 
-# **********************************************************************
-#  arrow_keys ( a_keys: int, x: int, y: int )
-#
-#
-# **********************************************************************
 
 def arrow_keys(a_keys: int, x: int, y: int):
+    """
+    - Valida a entrada de teclado
+    """
     if a_keys == GLUT_KEY_UP:         # Se pressionar UP
         pass
     if a_keys == GLUT_KEY_DOWN:       # Se pressionar DOWN
@@ -229,9 +212,16 @@ def arrow_keys(a_keys: int, x: int, y: int):
 
 
 def mouse(button: int, state: int, x: int, y: int):
+    """
+    - Redesenha caso o mouse esteja sobre a janela
+    """
     glutPostRedisplay()
 
+
 def mouseMove(x: int, y: int):
+    """
+    - Redesenha caso o mouse passe sobre a janela
+    """
     glutPostRedisplay()
 
 # ***********************************************************************************
@@ -244,6 +234,7 @@ glutInitWindowPosition(0, 0)
 
 # Define o tamanho inicial da janela grafica do programa
 glutInitWindowSize(650, 500)
+
 # Cria a janela na tela, definindo o nome da
 # que aparecera na barra de título da janela.
 glutInitWindowPosition(100, 100)
@@ -281,7 +272,6 @@ glutSpecialFunc(arrow_keys)
 
 #glutMouseFunc(mouse)
 #glutMotionFunc(mouseMove)
-
 
 try:
     # inicia o tratamento dos eventos
