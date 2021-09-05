@@ -1,12 +1,9 @@
-# **********************************************************************
-# PUCRS/FACIN
-# COMPUTAÇÃO GRÁFICA
-#
-# Teste de colisão em OpenGL
-#       
-# Marcio Sarroglia Pinho
-# pinho@inf.pucrs.br
-# **********************************************************************
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+__author__ = "Henrique Kops & Gabriel Castro"
+__credits__ = "Marcio Sarroglia Pinho"
+
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
@@ -33,7 +30,7 @@ def init():
     # Define a cor do fundo da tela (BRANCO) 
     glClearColor(1.0, 1.0, 1.0, 1.0)
     
-    linhas = [Linha() for i in range(N_LINHAS)]
+    linhas = [Linha() for _ in range(N_LINHAS)]
 
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)

@@ -1,9 +1,9 @@
-# ************************************************
-#   Ponto.py
-#   Define a classe Ponto
-#   Autor: Márcio Sarroglia Pinho
-#       pinho@pucrs.br
-# ************************************************
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+__author__ = "Henrique Kops & Gabriel Castro"
+__credits__ = "Marcio Sarroglia Pinho"
+
 
 """ Classe Ponto """
 class Ponto:   
