@@ -11,12 +11,12 @@ class Ponto:
     Classe Ponto
     """
 
-    def __init__(self, x=0,y=0,z=0):
+    def __init__(self, x:float=0, y:float=0, z:float=0) -> None:
         self.x = x
         self.y = y
         self.z = z
     
-    def imprime(self):
+    def imprime(self) -> None:
         """
         Imprime os valores de cada eixo do ponto
         """

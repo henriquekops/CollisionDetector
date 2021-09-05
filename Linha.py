@@ -20,11 +20,11 @@ class Linha:
     - Classe Linha
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.p1 = Ponto()
         self.p2 = Ponto()
 
-    def geraLinha(self, limite: int, tamMax: int):
+    def geraLinha(self, limite:int, tamMax:int) -> None:
         """
         - Gera uma linha com tamanho 'tamMax' dentro de um limite 'limite'.
         """
@@ -48,7 +48,7 @@ class Linha:
         else:
             self.p2.y = self.p1.y - deltaY * tamMax
 
-    def desenhaLinha(self):
+    def desenhaLinha(self) -> None:
         """
         - Desenha a linha na tela atual
         """

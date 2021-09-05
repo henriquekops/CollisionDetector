@@ -37,7 +37,7 @@ def init() -> None:
         linha.geraLinha(MAX_X, 10)
 
 
-def reshape(w: int, h: int) -> None:
+def reshape(w:int, h:int) -> None:
     """
     - Trata o redimensionamento da janela OpenGL
     """
@@ -55,7 +55,7 @@ def reshape(w: int, h: int) -> None:
     glLoadIdentity()
 
 
-def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> Tuple[int, float, float]:
+def intersec2d(k:Ponto, l:Ponto, m:Ponto, n:Ponto) -> Tuple[int, float, float]:
     """
     - Calcula a interseccao entre 2 retas (no plano 'XY' Z = 0)
     - Params:
@@ -79,7 +79,7 @@ def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> Tuple[int, float, floa
     return 1, s, t # há intersecção
 
 
-def HaInterseccao(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> bool:
+def HaInterseccao(k:Ponto, l:Ponto, m:Ponto, n:Ponto) -> bool:
     """
     - Detecta interseccao entre os pontos
     """
@@ -90,7 +90,7 @@ def HaInterseccao(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> bool:
     return s>=0.0 and s <=1.0 and t>=0.0 and t<=1.0
 
 
-def DesenhaLinhas():
+def DesenhaLinhas() -> None:
     """
     - Desenha as linhas na tela
     """
@@ -102,7 +102,7 @@ def DesenhaLinhas():
         linha.desenhaLinha()
 
 
-def DesenhaCenario():
+def DesenhaCenario() -> None:
     """
     - Desenha o cenario
     """
@@ -130,7 +130,7 @@ def DesenhaCenario():
                 linhas[j].desenhaLinha()
 
 
-def display():
+def display() -> None:
     """
     - Funcao que exibe os desenhos na tela
     """
@@ -146,7 +146,7 @@ def display():
     glutSwapBuffers()
 
 
-def animate():
+def animate() -> None:
     """
     - Funcao chama enquanto o programa esta ocioso.
     Calcula o FPS e numero de interseccao detectadas, junto com outras informacoes.
@@ -177,7 +177,7 @@ def animate():
         print(f'Contador de Chamadas: {ContChamadas}')
 
 
-def keyboard(*args):
+def keyboard(*args) -> None:
     """
     - Valida inicializacao / finalizacao do programa
     """
@@ -192,7 +192,7 @@ def keyboard(*args):
     glutPostRedisplay()
 
 
-def arrow_keys(a_keys: int, x: int, y: int):
+def arrow_keys(a_keys:int, x:int, y:int) -> None:
     """
     - Valida a entrada de teclado
     """
@@ -208,14 +208,14 @@ def arrow_keys(a_keys: int, x: int, y: int):
     glutPostRedisplay()
 
 
-def mouse(button: int, state: int, x: int, y: int):
+def mouse(button: int, state:int, x:int, y:int) -> None:
     """
     - Redesenha caso o mouse esteja sobre a janela
     """
     glutPostRedisplay()
 
 
-def mouseMove(x: int, y: int):
+def mouseMove(x:int, y:int) -> None:
     """
     - Redesenha caso o mouse passe sobre a janela
     """
