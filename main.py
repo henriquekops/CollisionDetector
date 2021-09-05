@@ -10,6 +10,7 @@ from OpenGL.GLU import *
 from ponto import Ponto
 from linha import Linha
 from typing import Tuple
+from aabb import AABB
 import time
 
 # Constantes
@@ -21,12 +22,13 @@ ESCAPE = b'\x1b'
 ContChamadas, ContadorInt, nFrames, TempoTotal, AccumDeltaT = 0, 0, 0, 0, 0
 oldTime = time.time()
 linhas = []
+aabbs = []
 
 def init() -> None:
     """
     - Inicializa os parâmetros globais de OpenGL
     """
-    global linhas
+    global linhas, aabbs
 
     # Define a cor do fundo da tela (BRANCO) 
     glClearColor(1.0, 1.0, 1.0, 1.0)
@@ -35,6 +37,9 @@ def init() -> None:
 
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)
+
+    # Gera os AABBs
+    aabbs = [AABB(linha) for linha in linhas]
 
 
 def reshape(w:int, h:int) -> None:
@@ -100,6 +105,11 @@ def DesenhaLinhas() -> None:
 
     for linha in linhas:
         linha.desenhaLinha()
+    
+    glColor3f(1,0,0)
+
+    for aabb in aabbs:
+        aabb.centro.desenhaPonto()
 
 
 def DesenhaCenario() -> None:
@@ -124,10 +134,11 @@ def DesenhaCenario() -> None:
 
             ContChamadas += 1
 
-            if HaInterseccao(PA, PB, PC, PD):
-                ContadorInt += 1
-                linhas[i].desenhaLinha()
-                linhas[j].desenhaLinha()
+            if aabbs[i].colisao(aabbs[j]):
+                if HaInterseccao(PA, PB, PC, PD):
+                    ContadorInt += 1
+                    linhas[i].desenhaLinha()
+                    linhas[j].desenhaLinha()
 
 
 def display() -> None:

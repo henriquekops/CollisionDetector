@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-__author__ = "Henrique Kops & Gabriel Castro"
-
 from __future__ import annotations
 from ponto import Ponto
 from linha import Linha
-from math import (
-    sqrt,
-    pow
-)
+
+__author__ = "Henrique Kops & Gabriel Castro"
 
 
 class AABB:
@@ -21,33 +17,34 @@ class AABB:
     def __init__(self, linha:Linha) -> None:
         self.metadeX = (linha.p2.x - linha.p1.x) / 2
         self.metadeY = (linha.p2.y - linha.p1.y) / 2
-        self.centro = Ponto(self.metadeX, self.metadeY)
+        self.centro = Ponto(x=(linha.p1.x + self.metadeX), y=(linha.p1.y + self.metadeY))
 
-    def __distanciaEuclidiana(self, aabb:AABB):
+    def __distanciaX(self, aabb:AABB):
         """
-        - Calcula a distancia euclidiana entre os centros das AABBs
+        - Calcula a distancia das coordenadas X dos centros das AABBs
         """
-        deltaX = aabb.centro.x - self.centro.x
-        deltaY = aabb.centro.y - self.centro.y
-        return sqrt(pow(deltaX) + pow(deltaY))
-    
+        return abs(aabb.centro.x - self.centro.x)
+
+    def __distanciaY(self, aabb:AABB):
+        """
+        - Calcula a distancia das coordenadas Y dos centros das AABBs
+        """
+        return abs(aabb.centro.y - self.centro.y)
+
     def __somaMetadesX(self, aabb:AABB):
         """
         - Soma as metades das linhas horizontais das AABBs
         """
-        return aabb.metadeX + self.metadeX
+        return abs(aabb.metadeX) + abs(self.metadeX)
 
     def __somaMetadesY(self, aabb:AABB):
         """
         - Soma as metades das linhas verticais das AABBs
         """
-        return aabb.metadeY + self.metadeY
+        return abs(aabb.metadeY) + abs(self.metadeY)
 
     def colisao(self, aabb:AABB) -> bool:
         """
         - Verifica a colisao entre as AABBs
         """
-        return (
-            self.__distanciaEuclidiana(aabb) < self.__somaMetadesX(aabb) and
-            self.__distanciaEuclidiana(aabb) < self.__somaMetadesY(aabb)
-        )
+        return (self.__distanciaX(aabb) < self.__somaMetadesX(aabb)) and (self.__distanciaY(aabb) < self.__somaMetadesY(aabb))
