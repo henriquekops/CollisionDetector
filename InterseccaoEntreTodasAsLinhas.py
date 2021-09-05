@@ -12,6 +12,7 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from Ponto import Ponto
 from Linha import Linha
+from typing import Tuple
 import time
 
 N_LINHAS = 50
@@ -71,7 +72,7 @@ def reshape(w: int, h: int):
 # int, valor do parâmetro no ponto de interseção (sobre a reta MN)       */
 #                                                                        */
 # ********************************************************************** */
-def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> (int, float, float):
+def intersec2d(k: Ponto, l: Ponto, m: Ponto, n: Ponto) -> Tuple[int, float, float]:
     det = (n.x - m.x) * (l.y - k.y)  -  (n.y - m.y) * (l.x - k.x)
 
     if (det == 0.0):
