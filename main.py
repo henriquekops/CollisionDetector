@@ -7,8 +7,8 @@ __credits__ = "Marcio Sarroglia Pinho"
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-from Ponto import Ponto
-from Linha import Linha
+from ponto import Ponto
+from linha import Linha
 from typing import Tuple
 import time
 

@@ -4,7 +4,7 @@
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
 
-from Ponto import Ponto
+from ponto import Ponto
 from random import randint as rand
 from OpenGL.GL import (
     glBegin,
