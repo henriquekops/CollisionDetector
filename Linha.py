@@ -4,11 +4,14 @@
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
 
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
 from Ponto import Ponto
 from random import randint as rand
+from OpenGL.GL import (
+    glBegin,
+    GL_LINES,
+    glVertex2f,
+    glEnd
+)
 
 
 class Linha:
@@ -17,45 +20,41 @@ class Linha:
     - Classe Linha
     """
 
-    def __init__(self, minx: float = 0, miny: float = 0, maxx: float = 0, maxy: float = 0, x1: float = 0, y1: float = 0, x2: float = 0, y2: float = 0):
-        self.minx = minx
-        self.miny = miny
-        self.maxx = maxx
-        self.maxy = maxy
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
+    def __init__(self):
+        self.p1 = Ponto()
+        self.p2 = Ponto()
 
     def geraLinha(self, limite: int, tamMax: int):
         """
-        - Gera uma linha com tamanho 'tamMax' dentro de um limite 'limite'. 
-        Armazena os valores nas variaveis x1,x2,y1,y2.
+        - Gera uma linha com tamanho 'tamMax' dentro de um limite 'limite'.
         """
-        self.x1 = (rand(0, limite)*10) / 10.0
-        self.y1 = (rand(0, limite)*10) / 10.0
+        # Geracao aleatoria para coordenadas de p1
+        self.p1.x = (rand(0, limite)*10) / 10.0
+        self.p1.y = (rand(0, limite)*10) / 10.0
 
+        # Variacao entre p1 e p2 no intervalo [0;limite)
         deltaX = rand(0, limite) / limite
         deltaY = rand(0, limite) / limite
 
+        # Geracao aleatoria para coordenada x de p2
         if (rand(0, 1) % 2):
-            self.x2 = self.x1 + deltaX * tamMax
+            self.p2.x = self.p1.x + deltaX * tamMax
         else:
-            self.x2 = self.x1 - deltaX * tamMax
+            self.p2.x = self.p1.x - deltaX * tamMax
 
+        # Geracao aleatoria para coordenada y de p2
         if (rand(0, 2) % 2):
-            self.y2 = self.y1 + deltaY * tamMax
+            self.p2.y = self.p1.y + deltaY * tamMax
         else:
-            self.y2 = self.y1 - deltaY * tamMax
+            self.p2.y = self.p1.y - deltaY * tamMax
 
-    
     def desenhaLinha(self):
         """
         - Desenha a linha na tela atual
         """
         glBegin(GL_LINES)
         
-        glVertex2f(self.x1, self.y1)
-        glVertex2f(self.x2, self.y2)
+        glVertex2f(self.p1.x, self.p1.y)
+        glVertex2f(self.p2.x, self.p2.y)
 
         glEnd()

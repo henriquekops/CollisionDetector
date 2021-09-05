@@ -17,5 +17,5 @@ make unix
 ## Run
 
 ```sh
-python InterseccaoEntreTodasAsLinhas.py
+python main.py
 ```

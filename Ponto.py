@@ -21,13 +21,3 @@ class Ponto:
         Imprime os valores de cada eixo do ponto
         """
         print (self.x, self.y, self.z)
-
-    def set(self, x, y, z=0):
-        """
-        Define os valores dos eixos do ponto
-        """
-        self.x = x
-        self.y = y
-        self.z = z
-
-

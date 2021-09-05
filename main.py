@@ -18,9 +18,7 @@ MAX_X = 100
 ESCAPE = b'\x1b'
 
 # Variaveis globais
-ContadorInt = 0
-ContChamadas = 0
-nFrames, TempoTotal, AccumDeltaT = 0, 0, 0
+ContChamadas, ContadorInt, nFrames, TempoTotal, AccumDeltaT = 0, 0, 0, 0, 0
 oldTime = time.time()
 linhas = []
 
@@ -110,7 +108,6 @@ def DesenhaCenario():
     """
     global ContChamadas, ContadorInt
 
-    PA, PB, PC, PD = Ponto(), Ponto(), Ponto(), Ponto()
     ContChamadas, ContadorInt = 0, 0
     
     # Desenha as linhas do cenário
@@ -118,12 +115,12 @@ def DesenhaCenario():
     glColor3f(1,0,0)
     
     for i in range(N_LINHAS):
-        PA.set(linhas[i].x1, linhas[i].y1)
-        PB.set(linhas[i].x2, linhas[i].y2)
+        PA = linhas[i].p1
+        PB = linhas[i].p2
 
         for j in range(N_LINHAS):
-            PC.set(linhas[j].x1, linhas[j].y1)
-            PD.set(linhas[j].x2, linhas[j].y2)
+            PC = linhas[j].p1
+            PD = linhas[j].p2
 
             ContChamadas += 1
 
@@ -131,7 +128,7 @@ def DesenhaCenario():
                 ContadorInt += 1
                 linhas[i].desenhaLinha()
                 linhas[j].desenhaLinha()
-            
+
 
 def display():
     """
@@ -224,57 +221,56 @@ def mouseMove(x: int, y: int):
     """
     glutPostRedisplay()
 
-# ***********************************************************************************
+
 # Programa Principal
-# ***********************************************************************************
+if __name__ == '__main__':
+    glutInit(sys.argv)
+    glutInitDisplayMode(GLUT_RGBA)
+    glutInitWindowPosition(0, 0)
 
-glutInit(sys.argv)
-glutInitDisplayMode(GLUT_RGBA)
-glutInitWindowPosition(0, 0)
+    # Define o tamanho inicial da janela grafica do programa
+    glutInitWindowSize(650, 500)
 
-# Define o tamanho inicial da janela grafica do programa
-glutInitWindowSize(650, 500)
+    # Cria a janela na tela, definindo o nome da
+    # que aparecera na barra de título da janela.
+    glutInitWindowPosition(100, 100)
+    wind = glutCreateWindow("Algorimos de Cálculo de Colisão")
 
-# Cria a janela na tela, definindo o nome da
-# que aparecera na barra de título da janela.
-glutInitWindowPosition(100, 100)
-wind = glutCreateWindow("Algorimos de Cálculo de Colisão")
+    # executa algumas inicializações
+    init ()
 
-# executa algumas inicializações
-init ()
+    # Define que o tratador de evento para
+    # o redesenho da tela. A funcao "display"
+    # será chamada automaticamente quando
+    # for necessário redesenhar a janela
+    glutDisplayFunc(display)
+    glutIdleFunc (animate)
 
-# Define que o tratador de evento para
-# o redesenho da tela. A funcao "display"
-# será chamada automaticamente quando
-# for necessário redesenhar a janela
-glutDisplayFunc(display)
-glutIdleFunc (animate)
+    # o redimensionamento da janela. A funcao "reshape"
+    # Define que o tratador de evento para
+    # será chamada automaticamente quando
+    # o usuário alterar o tamanho da janela
+    glutReshapeFunc(reshape)
 
-# o redimensionamento da janela. A funcao "reshape"
-# Define que o tratador de evento para
-# será chamada automaticamente quando
-# o usuário alterar o tamanho da janela
-glutReshapeFunc(reshape)
+    # Define que o tratador de evento para
+    # as teclas. A funcao "keyboard"
+    # será chamada automaticamente sempre
+    # o usuário pressionar uma tecla comum
+    glutKeyboardFunc(keyboard)
+        
+    # Define que o tratador de evento para
+    # as teclas especiais(F1, F2,... ALT-A,
+    # ALT-B, Teclas de Seta, ...).
+    # A funcao "arrow_keys" será chamada
+    # automaticamente sempre o usuário
+    # pressionar uma tecla especial
+    glutSpecialFunc(arrow_keys)
 
-# Define que o tratador de evento para
-# as teclas. A funcao "keyboard"
-# será chamada automaticamente sempre
-# o usuário pressionar uma tecla comum
-glutKeyboardFunc(keyboard)
-    
-# Define que o tratador de evento para
-# as teclas especiais(F1, F2,... ALT-A,
-# ALT-B, Teclas de Seta, ...).
-# A funcao "arrow_keys" será chamada
-# automaticamente sempre o usuário
-# pressionar uma tecla especial
-glutSpecialFunc(arrow_keys)
+    #glutMouseFunc(mouse)
+    #glutMotionFunc(mouseMove)
 
-#glutMouseFunc(mouse)
-#glutMotionFunc(mouseMove)
-
-try:
-    # inicia o tratamento dos eventos
-    glutMainLoop()
-except SystemExit:
-    pass
+    try:
+        # inicia o tratamento dos eventos
+        glutMainLoop()
+    except SystemExit:
+        pass
