@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+# dependencias externas
 from OpenGL.GL import (
     glBegin,
     GL_POINTS,
     glVertex2f,
     glEnd
 )
-from OpenGL.GL.exceptional import glVertex
-
 
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"

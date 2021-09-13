@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-__author__ = "Henrique Kops & Gabriel Castro"
-__credits__ = "Marcio Sarroglia Pinho"
-
+# dependencias externas
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-from ponto import Ponto
-from linha import Linha
+
+# dependencias internas
 from typing import Tuple
-from aabb import AABB
 import time
+
+# dependencies de codigo
+from src.ponto import Ponto
+from src.linha import Linha
+from src.aabb import AABB
+
+__author__ = "Henrique Kops & Gabriel Castro"
+__credits__ = "Marcio Sarroglia Pinho"
 
 # Constantes
 N_LINHAS = 50

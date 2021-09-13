@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+# dependencias internas
 from __future__ import annotations
+
+# dependencias de codigo
 from ponto import Ponto
 from linha import Linha
 

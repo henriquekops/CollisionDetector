@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-__author__ = "Henrique Kops & Gabriel Castro"
-__credits__ = "Marcio Sarroglia Pinho"
-
-from ponto import Ponto
-from random import randint as rand
+# dependencias externas
 from OpenGL.GL import (
     glBegin,
     GL_LINES,
     glVertex2f,
     glEnd
 )
+
+# dependencias internas
+from random import randint as rand
+
+# dependencias de codigo
+from ponto import Ponto
+
+__author__ = "Henrique Kops & Gabriel Castro"
+__credits__ = "Marcio Sarroglia Pinho"
 
 
 class Linha:
