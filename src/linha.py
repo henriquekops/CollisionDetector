@@ -25,9 +25,10 @@ class Linha:
     - Classe Linha
     """
 
-    def __init__(self) -> None:
+    def __init__(self, idx) -> None:
         self.p1 = Ponto()
         self.p2 = Ponto()
+        self.idx = idx
 
     def geraLinha(self, limite:int, tamMax:int) -> None:
         """
@@ -52,6 +53,18 @@ class Linha:
             self.p2.y = self.p1.y + deltaY * tamMax
         else:
             self.p2.y = self.p1.y - deltaY * tamMax
+
+    def pontoMin(self):
+        if self.p1.x < self.p2.x:
+            return self.p1 
+        else:
+            return self.p2
+
+    def pontoMax(self):
+        if self.p1.x > self.p2.x:
+            return self.p1 
+        else:
+            return self.p2
 
     def desenhaLinha(self) -> None:
         """

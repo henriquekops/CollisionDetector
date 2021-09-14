@@ -38,7 +38,7 @@ def init() -> None:
     # Define a cor do fundo da tela (BRANCO) 
     glClearColor(1.0, 1.0, 1.0, 1.0)
     
-    linhas = [Linha() for _ in range(N_LINHAS)]
+    linhas = [Linha(i) for i in range(N_LINHAS)]
 
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)
