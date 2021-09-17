@@ -13,12 +13,13 @@ import time
 from src.linha import Linha
 from src.aabb import AABB
 from src.validador import Interseccao
+from src.hierarquico import SubdivisaoRegular
 
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
 
 # Constantes
-N_LINHAS = 50
+N_LINHAS = 10
 MAX_X = 100
 ESCAPE = b'\x1b'
 
@@ -27,6 +28,7 @@ ContChamadas, ContadorInt, nFrames, TempoTotal, AccumDeltaT = 0, 0, 0, 0, 0
 oldTime = time.time()
 linhas = []
 aabbs = []
+subReg = SubdivisaoRegular(50, 10, 10)
 
 def init() -> None:
     """
@@ -35,7 +37,7 @@ def init() -> None:
     global linhas, aabbs
 
     # Define a cor do fundo da tela (BRANCO) 
-    glClearColor(1.0, 1.0, 1.0, 1.0)
+    glClearColor(0, 0, 0, 0)
     
     linhas = [Linha(i) for i in range(N_LINHAS)]
 
@@ -44,6 +46,10 @@ def init() -> None:
 
     # Gera os AABBs
     aabbs = [AABB(linha) for linha in linhas]
+
+    # Gera a mstriz de subdivisao regular
+    subReg.geraMatriz()
+    for linha in linhas: subReg.envelope(linha)
 
 
 def reshape(w:int, h:int) -> None:
@@ -68,17 +74,52 @@ def DesenhaLinhas() -> None:
     - Desenha as linhas na tela
     """
     global linhas
-
-    glColor3f(0,1,0)
-
-    for linha in linhas:
-        linha.desenhaLinha()
     
     glColor3f(1,0,0)
 
     for aabb in aabbs:
         aabb.centro.desenhaPonto()
 
+    for i in range(subReg.N):
+        for j in range(subReg.N):
+            
+            celula = subReg.M[i][j]
+
+            if celula.contem:
+                glColor3f(0.5,0,0.5)
+                glBegin(GL_QUADS)
+                glVertex2f(celula.p1.x, celula.p1.y)
+                glVertex2f(celula.p2.x, celula.p2.y)
+                glVertex2f(celula.p3.x, celula.p3.y)
+                glVertex2f(celula.p4.x, celula.p4.y)
+                glEnd()
+
+            glColor3f(1,0,1)
+
+            glBegin(GL_LINES)
+            glVertex2f(celula.p1.x, celula.p1.y)
+            glVertex2f(celula.p2.x, celula.p2.y)
+            glEnd()
+
+            glBegin(GL_LINES)
+            glVertex2f(celula.p2.x, celula.p2.y)
+            glVertex2f(celula.p3.x, celula.p3.y)
+            glEnd()
+
+            glBegin(GL_LINES)
+            glVertex2f(celula.p3.x, celula.p3.y)
+            glVertex2f(celula.p4.x, celula.p4.y)
+            glEnd()
+
+            glBegin(GL_LINES)
+            glVertex2f(celula.p4.x, celula.p4.y)
+            glVertex2f(celula.p1.x, celula.p1.y)
+            glEnd()
+
+    glColor3f(0,1,0)
+
+    for linha in linhas:
+        linha.desenhaLinha()
 
 def DesenhaCenario() -> None:
     """
@@ -213,7 +254,7 @@ if __name__ == '__main__':
     # Cria a janela na tela, definindo o nome da
     # que aparecera na barra de título da janela.
     glutInitWindowPosition(100, 100)
-    wind = glutCreateWindow("Algorimos de Cálculo de Colisão")
+    wind = glutCreateWindow("Algorimos de Calculo de Colisao")
 
     # executa algumas inicializações
     init ()

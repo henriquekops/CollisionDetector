@@ -13,7 +13,7 @@ from OpenGL.GL import (
 from random import randint as rand
 
 # dependencias de codigo
-from ponto import Ponto
+from src.ponto import Ponto
 
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
@@ -55,16 +55,37 @@ class Linha:
             self.p2.y = self.p1.y - deltaY * tamMax
 
     def pontoMin(self):
+        x = 0
+        y = 0
+        
         if self.p1.x < self.p2.x:
-            return self.p1 
+            x = self.p1.x
         else:
-            return self.p2
+            x = self.p2.x
+        
+        if self.p1.y < self.p2.y:
+            y = self.p1.y
+        else:
+            y = self.p2.y
+        
+        return Ponto(x, y)
+
 
     def pontoMax(self):
+        x = 0
+        y = 0
+
         if self.p1.x > self.p2.x:
-            return self.p1 
+            x = self.p1.x
         else:
-            return self.p2
+            x = self.p2.x
+        
+        if self.p1.y > self.p2.y:
+            y = self.p1.y
+        else:
+            y = self.p2.y
+        
+        return Ponto(x, y)
 
     def desenhaLinha(self) -> None:
         """

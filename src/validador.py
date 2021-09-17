@@ -5,7 +5,7 @@
 from typing import Tuple
 
 # dependencias de codigo
-from ponto import Ponto
+from src.ponto import Ponto
 
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
@@ -42,7 +42,7 @@ class Interseccao:
         """
         - Detecta interseccao entre os pontos
         """
-        ret, s, t = cls.intersec2d( k,  l,  m,  n)
+        ret, s, t = cls.__intersec2d( k,  l,  m,  n)
 
         if not ret: return False
 

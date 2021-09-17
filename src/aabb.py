@@ -5,8 +5,8 @@
 from __future__ import annotations
 
 # dependencias de codigo
-from ponto import Ponto
-from linha import Linha
+from src.ponto import Ponto
+from src.linha import Linha
 
 __author__ = "Henrique Kops & Gabriel Castro"
 
