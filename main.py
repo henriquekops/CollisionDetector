@@ -10,6 +10,7 @@ from OpenGL.GLU import *
 import time
 
 # dependencias de codigo
+from src.ponto import Ponto
 from src.linha import Linha
 from src.aabb import AABB
 from src.validador import Interseccao
@@ -22,6 +23,9 @@ __credits__ = "Marcio Sarroglia Pinho"
 N_LINHAS = 100
 MAX_X = 100
 ESCAPE = b'\x1b'
+NAIVE_MODE = 'naive'
+AABB_MODE = 'aabb'
+SUBREG_MODE = 'subreg'
 
 # Variaveis globais
 ContChamadas, ContadorInt, nFrames, TempoTotal, AccumDeltaT = 0, 0, 0, 0, 0
@@ -29,12 +33,14 @@ oldTime = time.time()
 linhas = []
 aabbs = []
 subReg = SubdivisaoRegular(50, 10, 10)
+mode = NAIVE_MODE
+
 
 def init() -> None:
     """
     - Inicializa os parâmetros globais de OpenGL
     """
-    global linhas, aabbs
+    global linhas
 
     # Define a cor do fundo da tela (PRETO) 
     glClearColor(0, 0, 0, 0)
@@ -43,13 +49,22 @@ def init() -> None:
 
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)
+    
+    if mode == AABB_MODE:
+        init_aabb()
+    elif mode == SUBREG_MODE:
+        init_subReg()
 
-    # TODO: Switch from input
 
+def init_aabb() -> None:
     # Gera os AABBs
-    # aabbs = [AABB(linha) for linha in linhas]
+    global aabbs
+    aabbs = [AABB(linha) for linha in linhas]
 
+
+def init_subReg() -> None:
     # Gera a matriz de subdivisao regular
+    global subReg
     subReg.geraMatriz()
     for linha in linhas: subReg.envelope(linha)
 
@@ -76,30 +91,37 @@ def DesenhaLinhas() -> None:
     - Desenha as linhas na tela
     """
     global linhas
-    
-    # glColor3f(1,0,0)
-    # for aabb in aabbs:
-    #     aabb.centro.desenhaPonto()
-
-    # subReg.desenhaMatriz()
 
     glColor3f(0,1,0)
 
     for linha in linhas:
         linha.desenhaLinha()
 
+
+def DesenhaAABB():
+    """
+    - Desenha os centros dos AABBs na tela
+    """
+
+    glColor3f(1,0,0)
+    for aabb in aabbs:
+        aabb.centro.desenhaPonto()
+
+
+def DesenhaSubReg():
+    """
+    - Desenha as subdivisoes na tela
+    """
+    subReg.desenhaMatriz()
+
+
 def DesenhaCenario() -> None:
     """
     - Desenha o cenario
     """
     global ContChamadas, ContadorInt
-
     ContChamadas, ContadorInt = 0, 0
     otimizaSubReg = True
-    
-    # Desenha as linhas do cenário
-    glLineWidth(1)
-    glColor3f(1,0,0)
     
     for i in range(N_LINHAS):
         PA = linhas[i].p1
@@ -109,19 +131,37 @@ def DesenhaCenario() -> None:
             PC = linhas[j].p1
             PD = linhas[j].p2
 
-            # if aabbs[i].colisao(aabbs[j]):
+            if mode == AABB_MODE:
+                if aabbs[i].colisao(aabbs[j]):
+                    calculaInterseccao(PA, PB, PC, PD, i, j)
             
-            for k, l in linhas[i].celulas:
-                celula: Celula = subReg.M[k][l]
-                if celula.contemLinha(j) and otimizaSubReg:
-                    otimizaSubReg = False
-                    ContChamadas += 1
-                    if Interseccao.valida(PA, PB, PC, PD):
-                        ContadorInt += 1
-                        linhas[i].desenhaLinha()
-                        linhas[j].desenhaLinha()
-            
-            otimizaSubReg = True
+            if mode == SUBREG_MODE:
+                for k, l in linhas[i].celulas:
+                    celula: Celula = subReg.M[k][l]
+                    if celula.contemLinha(j) and otimizaSubReg:
+                        otimizaSubReg = False
+                        calculaInterseccao(PA, PB, PC, PD, i, j)
+                otimizaSubReg = True
+
+            if mode == NAIVE_MODE:
+                calculaInterseccao(PA, PB, PC, PD, i, j)
+
+
+def calculaInterseccao(PA:Ponto, PB:Ponto, PC:Ponto, PD:Ponto, i:int, j:int):
+    """
+    - Método intermediario para o calculo de colisao entre retas
+    """
+    global ContChamadas, ContadorInt
+
+    ContChamadas += 1
+    
+    glLineWidth(1)
+    glColor3f(1,0,0)
+
+    if Interseccao.valida(PA, PB, PC, PD):
+        ContadorInt += 1
+        linhas[i].desenhaLinha()
+        linhas[j].desenhaLinha()
 
 
 def display() -> None:
@@ -133,10 +173,18 @@ def display() -> None:
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
-    
-    DesenhaLinhas()
+
+    if mode == AABB_MODE:
+        DesenhaLinhas()
+        DesenhaAABB()
+    elif mode == SUBREG_MODE:
+        DesenhaSubReg()
+        DesenhaLinhas()
+    elif mode == NAIVE_MODE:
+        DesenhaLinhas()
+
     DesenhaCenario()
-    
+
     glutSwapBuffers()
 
 
@@ -176,11 +224,24 @@ def keyboard(*args) -> None:
     - Valida inicializacao / finalizacao do programa
     """
 
+    global mode
+
     if args[0] == ESCAPE:   # Termina o programa qdo
         os._exit(0)         # a tecla ESC for pressionada
 
     if args[0] == b' ':
         init()
+
+    if args[0] == b's':
+        mode = SUBREG_MODE
+        init_subReg()
+    
+    if args[0] == b'a':
+        mode = AABB_MODE
+        init_aabb()
+    
+    if args[0] == b'n':
+        mode = NAIVE_MODE
 
     # Força o redesenho da tela
     glutPostRedisplay()
