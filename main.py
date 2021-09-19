@@ -13,13 +13,13 @@ import time
 from src.linha import Linha
 from src.aabb import AABB
 from src.validador import Interseccao
-from src.hierarquico import SubdivisaoRegular
+from src.hierarquico import Celula, SubdivisaoRegular
 
 __author__ = "Henrique Kops & Gabriel Castro"
 __credits__ = "Marcio Sarroglia Pinho"
 
 # Constantes
-N_LINHAS = 10
+N_LINHAS = 100
 MAX_X = 100
 ESCAPE = b'\x1b'
 
@@ -36,7 +36,7 @@ def init() -> None:
     """
     global linhas, aabbs
 
-    # Define a cor do fundo da tela (BRANCO) 
+    # Define a cor do fundo da tela (PRETO) 
     glClearColor(0, 0, 0, 0)
     
     linhas = [Linha(i) for i in range(N_LINHAS)]
@@ -44,10 +44,12 @@ def init() -> None:
     for linha in linhas:
         linha.geraLinha(MAX_X, 10)
 
-    # Gera os AABBs
-    aabbs = [AABB(linha) for linha in linhas]
+    # TODO: Switch from input
 
-    # Gera a mstriz de subdivisao regular
+    # Gera os AABBs
+    # aabbs = [AABB(linha) for linha in linhas]
+
+    # Gera a matriz de subdivisao regular
     subReg.geraMatriz()
     for linha in linhas: subReg.envelope(linha)
 
@@ -75,46 +77,11 @@ def DesenhaLinhas() -> None:
     """
     global linhas
     
-    glColor3f(1,0,0)
+    # glColor3f(1,0,0)
+    # for aabb in aabbs:
+    #     aabb.centro.desenhaPonto()
 
-    for aabb in aabbs:
-        aabb.centro.desenhaPonto()
-
-    for i in range(subReg.N):
-        for j in range(subReg.N):
-            
-            celula = subReg.M[i][j]
-
-            if celula.contem:
-                glColor3f(0.5,0,0.5)
-                glBegin(GL_QUADS)
-                glVertex2f(celula.p1.x, celula.p1.y)
-                glVertex2f(celula.p2.x, celula.p2.y)
-                glVertex2f(celula.p3.x, celula.p3.y)
-                glVertex2f(celula.p4.x, celula.p4.y)
-                glEnd()
-
-            glColor3f(1,0,1)
-
-            glBegin(GL_LINES)
-            glVertex2f(celula.p1.x, celula.p1.y)
-            glVertex2f(celula.p2.x, celula.p2.y)
-            glEnd()
-
-            glBegin(GL_LINES)
-            glVertex2f(celula.p2.x, celula.p2.y)
-            glVertex2f(celula.p3.x, celula.p3.y)
-            glEnd()
-
-            glBegin(GL_LINES)
-            glVertex2f(celula.p3.x, celula.p3.y)
-            glVertex2f(celula.p4.x, celula.p4.y)
-            glEnd()
-
-            glBegin(GL_LINES)
-            glVertex2f(celula.p4.x, celula.p4.y)
-            glVertex2f(celula.p1.x, celula.p1.y)
-            glEnd()
+    # subReg.desenhaMatriz()
 
     glColor3f(0,1,0)
 
@@ -128,6 +95,7 @@ def DesenhaCenario() -> None:
     global ContChamadas, ContadorInt
 
     ContChamadas, ContadorInt = 0, 0
+    otimizaSubReg = True
     
     # Desenha as linhas do cenário
     glLineWidth(1)
@@ -141,13 +109,19 @@ def DesenhaCenario() -> None:
             PC = linhas[j].p1
             PD = linhas[j].p2
 
-            ContChamadas += 1
-
-            if aabbs[i].colisao(aabbs[j]):
-                if Interseccao.valida(PA, PB, PC, PD):
-                    ContadorInt += 1
-                    linhas[i].desenhaLinha()
-                    linhas[j].desenhaLinha()
+            # if aabbs[i].colisao(aabbs[j]):
+            
+            for k, l in linhas[i].celulas:
+                celula: Celula = subReg.M[k][l]
+                if celula.contemLinha(j) and otimizaSubReg:
+                    otimizaSubReg = False
+                    ContChamadas += 1
+                    if Interseccao.valida(PA, PB, PC, PD):
+                        ContadorInt += 1
+                        linhas[i].desenhaLinha()
+                        linhas[j].desenhaLinha()
+            
+            otimizaSubReg = True
 
 
 def display() -> None:

@@ -29,6 +29,7 @@ class Linha:
         self.p1 = Ponto()
         self.p2 = Ponto()
         self.idx = idx
+        self.celulas = []
 
     def geraLinha(self, limite:int, tamMax:int) -> None:
         """

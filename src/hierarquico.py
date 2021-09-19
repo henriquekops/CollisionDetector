@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+# dependencias externas
+from OpenGL.GL import (
+    glBegin,
+    glColor3f,
+    GL_LINES,
+    GL_QUADS,
+    glVertex2f,
+    glEnd
+)
+
+
 # dependencias internas
 from math import floor
 
@@ -24,6 +35,12 @@ class Celula:
         self.p4 = Ponto(pRef.x+tamX, pRef.y)
         self.contem = False
         self.linhas = []
+
+    def contemLinha(self, idx):
+        """
+        Testa se a celula contem o indice da linha
+        """
+        return idx in self.linhas
 
     def testaInterseccao(self, linha:Linha):
         """
@@ -80,3 +97,41 @@ class SubdivisaoRegular:
                     if celula.testaInterseccao(linha):
                         celula.linhas.append(linha.idx)
                         celula.contem = True
+                        linha.celulas.append((i, j))
+
+    def desenhaMatriz(self):
+        for i in range(self.N):
+            for j in range(self.N):
+                
+                celula: Celula = self.M[i][j]
+
+                if celula.contem:
+                    glColor3f(0.5,0,0.5)
+                    glBegin(GL_QUADS)
+                    glVertex2f(celula.p1.x, celula.p1.y)
+                    glVertex2f(celula.p2.x, celula.p2.y)
+                    glVertex2f(celula.p3.x, celula.p3.y)
+                    glVertex2f(celula.p4.x, celula.p4.y)
+                    glEnd()
+
+                glColor3f(1,0,1)
+
+                glBegin(GL_LINES)
+                glVertex2f(celula.p1.x, celula.p1.y)
+                glVertex2f(celula.p2.x, celula.p2.y)
+                glEnd()
+
+                glBegin(GL_LINES)
+                glVertex2f(celula.p2.x, celula.p2.y)
+                glVertex2f(celula.p3.x, celula.p3.y)
+                glEnd()
+
+                glBegin(GL_LINES)
+                glVertex2f(celula.p3.x, celula.p3.y)
+                glVertex2f(celula.p4.x, celula.p4.y)
+                glEnd()
+
+                glBegin(GL_LINES)
+                glVertex2f(celula.p4.x, celula.p4.y)
+                glVertex2f(celula.p1.x, celula.p1.y)
+                glEnd()
