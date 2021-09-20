@@ -22,25 +22,25 @@ class AABB:
         self.metadeY = (linha.p2.y - linha.p1.y) / 2
         self.centro = Ponto(x=(linha.p1.x + self.metadeX), y=(linha.p1.y + self.metadeY))
 
-    def __distanciaX(self, aabb:AABB):
+    def __distanciaX(self, aabb:AABB) -> float:
         """
         - Calcula a distancia das coordenadas X dos centros das AABBs
         """
         return abs(aabb.centro.x - self.centro.x)
 
-    def __distanciaY(self, aabb:AABB):
+    def __distanciaY(self, aabb:AABB) -> float:
         """
         - Calcula a distancia das coordenadas Y dos centros das AABBs
         """
         return abs(aabb.centro.y - self.centro.y)
 
-    def __somaMetadesX(self, aabb:AABB):
+    def __somaMetadesX(self, aabb:AABB) -> float:
         """
         - Soma as metades das linhas horizontais das AABBs
         """
         return abs(aabb.metadeX) + abs(self.metadeX)
 
-    def __somaMetadesY(self, aabb:AABB):
+    def __somaMetadesY(self, aabb:AABB) -> float:
         """
         - Soma as metades das linhas verticais das AABBs
         """

@@ -55,7 +55,10 @@ class Linha:
         else:
             self.p2.y = self.p1.y - deltaY * tamMax
 
-    def pontoMin(self):
+    def pontoMin(self) -> Ponto:
+        """
+        - Retorna ponto minimo da reta
+        """
         x = 0
         y = 0
         
@@ -72,7 +75,10 @@ class Linha:
         return Ponto(x, y)
 
 
-    def pontoMax(self):
+    def pontoMax(self) -> Ponto:
+        """
+        - Retorna ponto maximo da reta
+        """
         x = 0
         y = 0
 

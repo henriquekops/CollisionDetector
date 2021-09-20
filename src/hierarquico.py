@@ -36,13 +36,13 @@ class Celula:
         self.contem = False
         self.linhas = []
 
-    def contemLinha(self, idx):
+    def contemLinha(self, idx) -> int:
         """
         Testa se a celula contem o indice da linha
         """
         return idx in self.linhas
 
-    def testaInterseccao(self, linha:Linha):
+    def testaInterseccao(self, linha:Linha) -> bool:
         """
         Testa a interseccao das linhas da celula com a linha em questao a partir
         de um ponto de referencia
@@ -59,13 +59,13 @@ class SubdivisaoRegular:
     Classe SubdivisaoRegular
     """
 
-    def __init__(self, n:int, xDiv:int, yDiv:int) -> None:
+    def __init__(self, n:int, xDiv:int, yDiv:int):
         self.N = n
         self.M = [[None for _ in range(self.N)] for _ in range(self.N)]
         self.tamX = self.N / xDiv
         self.tamY = self.N / yDiv
     
-    def geraMatriz(self):
+    def geraMatriz(self) -> None:
         """
         Gera a matriz de Celulas NxN
         """
@@ -74,7 +74,7 @@ class SubdivisaoRegular:
                 pRef=Ponto(x=(self.tamX*(i)), y=(self.tamY*(j)))
                 self.M[i][j] = Celula(pRef, self.tamX, self.tamY)
 
-    def envelope(self, linha:Linha):
+    def envelope(self, linha:Linha) -> None:
         """
         Calcula o envelope da linha em questao
         """
@@ -87,13 +87,13 @@ class SubdivisaoRegular:
         maxY = floor(pMax.y/self.tamY)
 
         if (minX == maxX) and (minY == maxY):
-            celula = self.M[minX][minY]
+            celula:Celula = self.M[minX][minY]
             celula.contem = True
         else:
             for i in range(minX, maxX+1):
                 for j in range(minY, maxY+1):
 
-                    celula = self.M[i][j]
+                    celula:Celula = self.M[i][j]
                     if celula.testaInterseccao(linha):
                         celula.linhas.append(linha.idx)
                         celula.contem = True

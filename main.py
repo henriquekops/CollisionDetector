@@ -32,7 +32,7 @@ ContChamadas, ContadorInt, nFrames, TempoTotal, AccumDeltaT = 0, 0, 0, 0, 0
 oldTime = time.time()
 linhas = []
 aabbs = []
-subReg = SubdivisaoRegular(50, 10, 10)
+subReg = None
 mode = NAIVE_MODE
 
 
@@ -57,13 +57,17 @@ def init() -> None:
 
 
 def init_aabb() -> None:
-    # Gera os AABBs
+    """
+     - Gera os AABBs
+    """
     global aabbs
     aabbs = [AABB(linha) for linha in linhas]
 
 
 def init_subReg() -> None:
-    # Gera a matriz de subdivisao regular
+    """
+     - Gera a matriz de subdivisao regular
+    """
     global subReg
     subReg.geraMatriz()
     for linha in linhas: subReg.envelope(linha)
@@ -98,7 +102,7 @@ def DesenhaLinhas() -> None:
         linha.desenhaLinha()
 
 
-def DesenhaAABB():
+def DesenhaAABB() -> None:
     """
     - Desenha os centros dos AABBs na tela
     """
@@ -108,7 +112,7 @@ def DesenhaAABB():
         aabb.centro.desenhaPonto()
 
 
-def DesenhaSubReg():
+def DesenhaSubReg() -> None:
     """
     - Desenha as subdivisoes na tela
     """
@@ -208,6 +212,7 @@ def animate() -> None:
         glutPostRedisplay()
 
     if TempoTotal > 5.0:
+        print(f'================{mode}=====================')
         print(f'Tempo Acumulado: {TempoTotal} segundos.')
         print(f'Nros de Frames sem desenho: {int(nFrames)}')
         print(f'FPS(sem desenho): {int(nFrames/TempoTotal)}')
@@ -279,6 +284,10 @@ def mouseMove(x:int, y:int) -> None:
 
 # Programa Principal
 if __name__ == '__main__':
+
+    # Processa parametros da linha de comando
+    subReg = SubdivisaoRegular(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
+
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_RGBA)
     glutInitWindowPosition(0, 0)
@@ -323,6 +332,7 @@ if __name__ == '__main__':
 
     #glutMouseFunc(mouse)
     #glutMotionFunc(mouseMove)
+
 
     try:
         # inicia o tratamento dos eventos
