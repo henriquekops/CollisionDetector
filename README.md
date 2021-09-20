@@ -1,30 +1,34 @@
 # CollisionDetector
-A program for line collision detection using OpenGL
+Um programa para detecção de colisão em linhas usando OpenGL
+## Dependencias
 
-## Dependencies
-
-On Windows:
+No Windows:
 
 ```sh
 make win
 ```
 
-On Unix:
+No Unix:
 ```
 make unix
 ```
 
-## Run
+## Execução
 
 ```sh
-python main.py
+python main.py < n > < xDiv > < yDiv >
+
+- n: Tamanho do universo da matriz da subdivisão regular
+- xDiv: Divisões no eixo X sobre o universo da subdivisão regular
+- yDiv: Divisões no eixo Y sobre o universo da subdivisão regular
+Esses parametros devem ser inseridos independente da solução escolhida pois a definição dessa será feita durante a execução (vid sessão abaixo)
 ```
 
 ## Runtime
 
-Default mode is NAIVE, it will calculate LINESxLINES collisions:
+Modo padrão é Ingênua, este calcula a colisão LINHAxLINHA:
 
-- Press 'a' to use AABB mode
-- Press 's' to use Regular Subdivision mode
-- Press 'n' to return to NAIVE mode
-- Press 'spacebar' to generate a new data set (will keep chosen detection mode)
+- Pressione 'a' para usar o modo AABB
+- Pressione 's' para usar o modo Subdivisão Regular
+- Pressione 'n' para returnar ao modo Ingênuo
+- Pressione 'spacebar' para gerar um novo data set (irá manter modo de detecção selecionado)
