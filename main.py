@@ -285,6 +285,10 @@ def mouseMove(x:int, y:int) -> None:
 # Programa Principal
 if __name__ == '__main__':
 
+    if len(sys.argv) < 4:
+        print('Usage: python main.py <n> <xDiv> <yDiv>')
+        sys.exit(0)
+
     # Processa parametros da linha de comando
     subReg = SubdivisaoRegular(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
 
