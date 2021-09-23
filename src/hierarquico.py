@@ -36,7 +36,7 @@ class Celula:
         self.contem = False
         self.linhas = []
 
-    def contemLinha(self, idx) -> int:
+    def contemLinha(self, idx) -> bool:
         """
         Testa se a celula contem o indice da linha
         """
